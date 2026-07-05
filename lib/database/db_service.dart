@@ -27,9 +27,9 @@ class DbService {
 
   }
 
-  Future<List<DatabaseModel>> searchWord(String keyword) async{
+  Future<List<DatabaseModel>> searchWord(String keyword,{int limit=20}) async{
     // to safe sql injection risk we should use both arguments for rawQuery()
-    final result = await _database.rawQuery("select * from $_tableName where eng like ?",['$keyword%']);
+    final result = await _database.rawQuery("select * from $_tableName where eng like ? limit $limit",['$keyword%']);
     return result.map((map){
       return DatabaseModel.fromMap(map);
     }).toList();

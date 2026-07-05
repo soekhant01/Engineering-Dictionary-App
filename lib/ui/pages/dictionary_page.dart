@@ -1,8 +1,9 @@
 import 'package:engineering_dictionary_app/database/database_model.dart';
 import 'package:engineering_dictionary_app/provider/dictionary_provider.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../widgets/dictionary_list_widgets.dart';
 
 class DictionaryPage extends StatefulWidget {
   const DictionaryPage({super.key});
@@ -54,71 +55,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                       ),
                     );
                   }
-                  return ListView.builder(
-                    padding: EdgeInsetsGeometry.symmetric(
-                      horizontal: 8,
-                      vertical: 8
-                    ),
-                    itemCount: results.length,
-                    itemBuilder: (context, index) {
-                      DatabaseModel resultList = results[index];
-                      return Padding(
-                        padding: const EdgeInsets.all(4.0),
-
-                        child: Container(
-                          padding: const EdgeInsets.all(16.0),
-                          decoration: BoxDecoration(
-                            color: CupertinoColors.systemBackground.resolveFrom(context),
-                            border: Border.all(
-                              color: CupertinoColors.systemGrey4.resolveFrom(context),
-
-                            )
-                          ),
-                          child: Column(
-                            crossAxisAlignment: .start,
-                            children: [
-                              Row(
-                                children: [
-                                  Flexible(
-                                    child: Text(
-                                      resultList.eng,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  SizedBox(width: 8),
-                                  Flexible(
-                                    child: Text(
-                                      "(${resultList.type})",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.grey,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ],
-                              ),
-
-                              Text(
-                                resultList.myan,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  );
+                  return DictionaryListWidget(results: results);
                 },
               ),
             ),
@@ -128,3 +65,5 @@ class _DictionaryPageState extends State<DictionaryPage> {
     );
   }
 }
+
+
