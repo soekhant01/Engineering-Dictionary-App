@@ -1,6 +1,9 @@
+import 'package:engineering_dictionary_app/database/db_service.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await DbService.init();
   runApp(const MyApp());
 }
 
