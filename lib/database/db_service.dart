@@ -22,8 +22,9 @@ class DbService {
         buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes)
       );
 
-      _database = await openDatabase(dbFile.path);
     }
+    _database = await openDatabase(dbFile.path);
+
   }
 
   Future<List<DatabaseModel>> searchWord(String keyword) async{

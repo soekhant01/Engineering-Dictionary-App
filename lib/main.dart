@@ -1,7 +1,9 @@
 import 'package:engineering_dictionary_app/database/db_service.dart';
+import 'package:engineering_dictionary_app/provider/dictionary_provider.dart';
 import 'package:engineering_dictionary_app/ui/pages/home_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,7 +17,8 @@ class EngineeringDictionaryApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoApp(
-      home: HomePage(),
+      home: ChangeNotifierProvider(create: (_) => DictionaryProvider(),
+      child: HomePage()),
     );
   }
 }
