@@ -1,3 +1,4 @@
+import 'package:engineering_dictionary_app/ui/pages/dictionary_detail_page.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../database/database_model.dart';
@@ -19,18 +20,27 @@ class DictionaryListWidget extends StatelessWidget {
       ),
       itemCount: results.length,
       itemBuilder: (context, index) {
-        DatabaseModel resultList = results[index];
-        return Padding(
-          padding: const EdgeInsets.all(4.0),
-
+        DatabaseModel model = results[index];
+        return GestureDetector(
+          onTap: (){
+            Navigator.push(context,
+              CupertinoPageRoute(
+                builder: (_){
+                  return DictionaryDetailPage(databaseModel: model);
+                }
+              )
+            );
+          },
           child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
                 color: CupertinoColors.systemBackground.resolveFrom(context),
                 border: Border.all(
                   color: CupertinoColors.systemGrey4.resolveFrom(context),
 
-                )
+                ),
+              borderRadius: BorderRadius.circular(8)
             ),
             child: Column(
               crossAxisAlignment: .start,
@@ -39,7 +49,7 @@ class DictionaryListWidget extends StatelessWidget {
                   children: [
                     Flexible(
                       child: Text(
-                        resultList.eng,
+                        model.eng,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -50,7 +60,7 @@ class DictionaryListWidget extends StatelessWidget {
                     SizedBox(width: 8),
                     Flexible(
                       child: Text(
-                        "(${resultList.type})",
+                        "(${model.type})",
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
@@ -63,7 +73,7 @@ class DictionaryListWidget extends StatelessWidget {
                 ),
 
                 Text(
-                  resultList.myan,
+                  model.myan,
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,

@@ -17,6 +17,7 @@ class EngineeringDictionaryApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoApp(
+      debugShowCheckedModeBanner: false,
       home: ChangeNotifierProvider(create: (_) => DictionaryProvider(),
       child: HomePage()),
     );
