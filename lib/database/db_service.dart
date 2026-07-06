@@ -7,33 +7,47 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DbService {
-
   static late Database _database;
   final String _tableName = "engineers";
-  static Future<void> init() async{
+
+  static Future<void> init() async {
     Directory directory = await getApplicationDocumentsDirectory();
     File dbFile = File("${directory.path}/engineering.db");
     // only one time copy if user first time run app
-    if(!dbFile.existsSync()){
+    if (!dbFile.existsSync()) {
       ByteData byteData = await rootBundle.load("assets/engineering.db");
       ByteBuffer buffer = byteData.buffer;
-    //   copying the db file
+      //   copying the db file
       await dbFile.writeAsBytes(
-        buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes)
+        buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes),
       );
-
     }
     _database = await openDatabase(dbFile.path);
-
   }
 
-  Future<List<DatabaseModel>> searchWord(String keyword,{int limit=20}) async{
+  Future<List<DatabaseModel>> searchWord(
+    String keyword, {
+    int limit = 20,
+  }) async {
     // to safe sql injection risk we should use both arguments for rawQuery()
-    final result = await _database.rawQuery("select * from $_tableName where eng like ? limit $limit",['$keyword%']);
-    return result.map((map){
+    final result = await _database.rawQuery(
+      "select * from $_tableName where eng like ? limit $limit",
+      ['$keyword%'],
+    );
+    return result.map((map) {
       return DatabaseModel.fromMap(map);
     }).toList();
-
   }
 
+  Future<int?> getFavourite(int id) async {
+    final listOfMap = await _database.rawQuery(
+      "select favourite from $_tableName where id=$id",
+    );
+    return listOfMap.isNotEmpty ? listOfMap.first['favourite'] as int : null;
+  }
+
+  Future<int> updateFavourite(int id, int favourite) async{
+
+    return _database.rawUpdate("update $_tableName set favourite=$favourite where id=$id");
+  }
 }
