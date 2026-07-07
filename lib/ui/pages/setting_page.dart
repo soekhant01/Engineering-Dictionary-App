@@ -1,4 +1,7 @@
+import 'package:engineering_dictionary_app/provider/dictionary_provider.dart';
+import 'package:engineering_dictionary_app/ui/pages/favourite_page.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
@@ -36,7 +39,12 @@ class _SettingPageState extends State<SettingPage> {
                 iconBg: CupertinoColors.systemRed,
                 label: 'Saved Terms',
                 destructive: false,
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    CupertinoPageRoute(builder: (_) => FavouritePage()),
+                  );
+                },
               ),
 
               _ButtonRow(
@@ -54,6 +62,10 @@ class _SettingPageState extends State<SettingPage> {
                       CupertinoDialogAction(
                         isDestructiveAction: true,
                         onPressed: () {
+                          Provider.of<DictionaryProvider>(
+                            context,
+                            listen: false,
+                          ).clearFavourites();
                           Navigator.pop(context);
                         },
                         child: const Text("Clear All"),

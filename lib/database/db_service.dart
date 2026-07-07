@@ -46,8 +46,24 @@ class DbService {
     return listOfMap.isNotEmpty ? listOfMap.first['favourite'] as int? : null;
   }
 
-  Future<int> updateFavourite(int id, int favourite) async{
+  Future<int> updateFavourite(int id, int favourite) async {
+    return _database.rawUpdate(
+      "update $_tableName set favourite=$favourite where id=$id",
+    );
+  }
 
-    return _database.rawUpdate("update $_tableName set favourite=$favourite where id=$id");
+  Future<List<DatabaseModel>> getFavouriteList() async {
+    final result = await _database.rawQuery(
+      "select * from $_tableName where favourite=1;",
+    );
+    return result.map((map) {
+      return DatabaseModel.fromMap(map);
+    }).toList();
+  }
+
+  Future<void> clearFavourites() async {
+    await _database.rawUpdate(
+      "update engineers set favourite=0 where favourite=1;",
+    );
   }
 }
