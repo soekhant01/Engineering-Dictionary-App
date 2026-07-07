@@ -1,4 +1,5 @@
 import 'package:engineering_dictionary_app/provider/dictionary_provider.dart';
+import 'package:engineering_dictionary_app/provider/theme_provider.dart';
 import 'package:engineering_dictionary_app/ui/pages/favourite_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
@@ -23,12 +24,21 @@ class _SettingPageState extends State<SettingPage> {
           children: [
             _SectionLabel('Appearance'),
             _Group([
-              _ToggleRow(
-                icon: CupertinoIcons.moon_fill,
-                iconBg: const Color(0xFF5E5CE6),
-                label: "Dark Mode",
-                value: true,
-                onChanged: (bool value) {},
+              Consumer<ThemeProvider>(
+                builder: (context, provider, child) {
+                  return _ToggleRow(
+                    icon: CupertinoIcons.moon_fill,
+                    iconBg: const Color(0xFF5E5CE6),
+                    label: "Dark Mode",
+                    value: provider.isDark,
+                    onChanged: (_) {
+                      Provider.of<ThemeProvider>(
+                        context,
+                        listen: false,
+                      ).changeTheme(!provider.isDark);
+                    },
+                  );
+                },
               ),
             ]),
 
