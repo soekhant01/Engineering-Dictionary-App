@@ -43,7 +43,7 @@ class DbService {
     final listOfMap = await _database.rawQuery(
       "select favourite from $_tableName where id=$id",
     );
-    return listOfMap.isNotEmpty ? listOfMap.first['favourite'] as int : null;
+    return listOfMap.isNotEmpty ? listOfMap.first['favourite'] as int? : null;
   }
 
   Future<int> updateFavourite(int id, int favourite) async{
