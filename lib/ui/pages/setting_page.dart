@@ -45,7 +45,29 @@ class _SettingPageState extends State<SettingPage> {
                 label: 'Clear All Favourites',
                 destructive: true,
                 enabled: true,
-                onTap: () {},
+                onTap: () => showCupertinoDialog(
+                  context: context,
+                  builder: (_) => CupertinoAlertDialog(
+                    content: Text("Remove All Favourites"),
+                    title: const Text("Clear Favourites"),
+                    actions: [
+                      CupertinoDialogAction(
+                        isDestructiveAction: true,
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text("Clear All"),
+                      ),
+                      CupertinoDialogAction(
+                        isDefaultAction: true,
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text("Cancel"),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ]),
 
@@ -193,6 +215,10 @@ class _ToggleRow extends StatelessWidget {
 }
 
 class _InfoRow extends StatelessWidget {
+  final IconData icon;
+  final Color iconBg;
+  final String label, value;
+
   const _InfoRow({
     required this.icon,
     required this.iconBg,
@@ -200,35 +226,28 @@ class _InfoRow extends StatelessWidget {
     required this.value,
   });
 
-  final IconData icon;
-  final Color iconBg;
-  final String label;
-  final String value;
-
   @override
   Widget build(BuildContext context) => Padding(
-    padding: EdgeInsetsGeometry.symmetric(horizontal: 14, vertical: 10),
+    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
     child: Row(
       children: [
         _IconBox(icon: icon, bg: iconBg),
         const SizedBox(width: 12),
         Expanded(
-          child: Column(
-            children: [
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 15,
-                  color: CupertinoColors.label.resolveFrom(context),
-                ),
-              ),
-            ],
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 15,
+              color: CupertinoColors.label.resolveFrom(context),
+            ),
           ),
         ),
-
         Text(
           value,
-          style: TextStyle(fontSize: 15, color: CupertinoColors.systemGrey),
+          style: const TextStyle(
+            fontSize: 15,
+            color: CupertinoColors.systemGrey,
+          ),
         ),
       ],
     ),
@@ -236,20 +255,20 @@ class _InfoRow extends StatelessWidget {
 }
 
 class _ButtonRow extends StatelessWidget {
-  const _ButtonRow({
-    required this.icon,
-    required this.iconBg,
-    required this.label,
-    this.destructive = true,
-    this.enabled = true,
-    required this.onTap,
-  });
-
   final IconData icon;
   final Color iconBg;
   final String label;
   final bool destructive, enabled;
   final VoidCallback onTap;
+
+  const _ButtonRow({
+    required this.icon,
+    required this.iconBg,
+    required this.label,
+    this.destructive = false,
+    this.enabled = true,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) => GestureDetector(
