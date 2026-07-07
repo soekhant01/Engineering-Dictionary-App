@@ -1,4 +1,5 @@
 import 'package:engineering_dictionary_app/ui/pages/dictionary_page.dart';
+import 'package:engineering_dictionary_app/ui/pages/setting_page.dart';
 import 'package:flutter/cupertino.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,6 +19,9 @@ class _HomePageState extends State<HomePage> {
 
       ]),
       tabBuilder: (_, index) {
+        if(index ==1 ){
+          return SettingPage();
+        }
         return DictionaryPage();
       },
     );

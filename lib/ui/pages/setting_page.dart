@@ -1,0 +1,282 @@
+import 'package:flutter/cupertino.dart';
+
+class SettingPage extends StatefulWidget {
+  const SettingPage({super.key});
+
+  @override
+  State<SettingPage> createState() => _SettingPageState();
+}
+
+class _SettingPageState extends State<SettingPage> {
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoPageScaffold(
+      child: NestedScrollView(
+        headerSliverBuilder: (_, _) {
+          return [CupertinoSliverNavigationBar(largeTitle: Text("Setting"))];
+        },
+        body: ListView(
+          padding: const EdgeInsets.only(top: 8, bottom: 40),
+          children: [
+            _SectionLabel('Appearance'),
+            _Group([
+              _ToggleRow(
+                icon: CupertinoIcons.moon_fill,
+                iconBg: const Color(0xFF5E5CE6),
+                label: "Dark Mode",
+                value: true,
+                onChanged: (bool value) {},
+              ),
+            ]),
+
+            _SectionLabel('Favourites'),
+            _Group([
+              _ButtonRow(
+                icon: CupertinoIcons.heart_fill,
+                iconBg: CupertinoColors.systemRed,
+                label: 'Saved Terms',
+                destructive: false,
+                onTap: () {},
+              ),
+
+              _ButtonRow(
+                icon: CupertinoIcons.trash,
+                iconBg: CupertinoColors.systemRed,
+                label: 'Clear All Favourites',
+                destructive: true,
+                enabled: true,
+                onTap: () {},
+              ),
+            ]),
+
+            _SectionLabel('About'),
+            _Group([
+              _InfoRow(
+                icon: CupertinoIcons.info_circle_fill,
+                iconBg: CupertinoColors.activeBlue,
+                label: 'Version',
+                value: '1.0.0',
+              ),
+            ]),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _Group extends StatelessWidget {
+  final List<Widget> children;
+
+  const _Group(this.children);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: CupertinoColors.systemBackground.resolveFrom(context),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: CupertinoColors.systemGrey5.resolveFrom(context),
+          width: 0.5,
+        ),
+      ),
+      child: Column(
+        children: children.asMap().entries.map((e) {
+          final last = e.key == children.length - 1;
+          return Column(
+            children: [
+              e.value,
+              if (!last)
+                Container(
+                  height: 0.5,
+                  margin: const EdgeInsets.only(left: 52),
+                  color: CupertinoColors.systemGrey5.resolveFrom(context),
+                ),
+            ],
+          );
+        }).toList(),
+      ),
+    );
+  }
+}
+
+class _SectionLabel extends StatelessWidget {
+  final String text;
+
+  const _SectionLabel(this.text);
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.fromLTRB(20, 22, 20, 6),
+    child: Text(
+      text.toUpperCase(),
+      style: const TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.w600,
+        letterSpacing: 0.5,
+        color: CupertinoColors.systemGrey,
+      ),
+    ),
+  );
+}
+
+class _IconBox extends StatelessWidget {
+  const _IconBox({required this.icon, required this.bg});
+
+  final IconData icon;
+  final Color bg;
+
+  @override
+  Widget build(BuildContext context) => Container(
+    width: 30,
+    height: 30,
+    decoration: BoxDecoration(
+      color: bg,
+      borderRadius: BorderRadius.circular(7),
+    ),
+    child: Icon(icon, color: CupertinoColors.white, size: 16),
+  );
+}
+
+class _ToggleRow extends StatelessWidget {
+  final IconData icon;
+  final Color iconBg;
+  final String label;
+  final String? subtitle;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+
+  const _ToggleRow({
+    required this.icon,
+    required this.iconBg,
+    required this.label,
+    this.subtitle,
+    required this.value,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+    child: Row(
+      children: [
+        _IconBox(icon: icon, bg: iconBg),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 15,
+                  color: CupertinoColors.label.resolveFrom(context),
+                ),
+              ),
+              if (subtitle != null)
+                Text(
+                  subtitle!,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: CupertinoColors.systemGrey,
+                  ),
+                ),
+            ],
+          ),
+        ),
+        CupertinoSwitch(value: value, onChanged: onChanged),
+      ],
+    ),
+  );
+}
+
+class _InfoRow extends StatelessWidget {
+  const _InfoRow({
+    required this.icon,
+    required this.iconBg,
+    required this.label,
+    required this.value,
+  });
+
+  final IconData icon;
+  final Color iconBg;
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: EdgeInsetsGeometry.symmetric(horizontal: 14, vertical: 10),
+    child: Row(
+      children: [
+        _IconBox(icon: icon, bg: iconBg),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            children: [
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 15,
+                  color: CupertinoColors.label.resolveFrom(context),
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        Text(
+          value,
+          style: TextStyle(fontSize: 15, color: CupertinoColors.systemGrey),
+        ),
+      ],
+    ),
+  );
+}
+
+class _ButtonRow extends StatelessWidget {
+  const _ButtonRow({
+    required this.icon,
+    required this.iconBg,
+    required this.label,
+    this.destructive = true,
+    this.enabled = true,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final Color iconBg;
+  final String label;
+  final bool destructive, enabled;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) => GestureDetector(
+    behavior: HitTestBehavior.opaque,
+    onTap: enabled ? onTap : null,
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      child: Row(
+        children: [
+          _IconBox(
+            icon: icon,
+            bg: enabled ? iconBg : CupertinoColors.systemGrey,
+          ),
+          const SizedBox(width: 12),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 15,
+              color: !enabled
+                  ? CupertinoColors.systemGrey
+                  : destructive
+                  ? CupertinoColors.systemRed
+                  : CupertinoColors.label.resolveFrom(context),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
